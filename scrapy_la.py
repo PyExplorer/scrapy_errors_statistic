@@ -159,7 +159,7 @@ def main():
 
     client = ScrapinghubClient(apikey)
     job = client.get_job(args.job)
-    args.func(job, max_urls_for_output=(max(args.max, 30)))
+    args.func(job, max_urls_for_output=(min(args.max, 30)))
 
 
 if __name__ == '__main__':
