@@ -27,7 +27,7 @@ def parse_args():
         description='Get statistic for scrapy log',
         parents=[parent_parser]
     )
-    subparsers = parser.add_subparsers(help='sub-command help')
+    subparsers = parser.add_subparsers(help='sub-command help', dest="command")
     parser_errors = subparsers.add_parser(
         'errors',
         help='Analyze log errors',
@@ -38,15 +38,15 @@ def parse_args():
         type=int,
         help='Set max urls to output for each error',
         default=3,
-
     )
-
     parser_errors.set_defaults(func=parse_errors)
+
     parser_warnings = subparsers.add_parser(
         'warnings',
         help='Analyze log warnings',
     )
     parser_warnings.set_defaults(func=parse_warnings)
+
     return parser.parse_args()
 
 
@@ -115,7 +115,7 @@ def create_errors_body(df_grouped, max_urls_for_output):
     return "\n".join(body)
 
 
-def parse_errors(job, max_urls_for_output=3):
+def parse_errors(job):
     handlers = {
         'scrapy_type':
             [get_part_of_log_with_re, TYPE_OF_ERRORS_PATTERN],
@@ -140,14 +140,15 @@ def parse_errors(job, max_urls_for_output=3):
             error_dict[key] = handler[0](handler[1], message)
         errors.append(error_dict)
 
+    return errors
+
+
+def create_errors_report(errors, max_urls_for_output):
     df = pd.DataFrame(errors)
     header = create_errors_header(pd.DataFrame(errors))
-    print(header)
-
     df_grouped = df.groupby(['description'], as_index=False)
     body = create_errors_body(df_grouped, max_urls_for_output)
-
-    print(body)
+    return "\n".join([header, body])
 
 
 def main():
@@ -159,7 +160,13 @@ def main():
 
     client = ScrapinghubClient(apikey)
     job = client.get_job(args.job)
-    args.func(job, max_urls_for_output=(min(args.max, 30)))
+    events = args.func(job)
+    if args.command == 'errors':
+        report_errors = create_errors_report(
+            events,
+            max_urls_for_output=(min(args.max, 30))
+        )
+        print(report_errors)
 
 
 if __name__ == '__main__':
