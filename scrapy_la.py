@@ -1,7 +1,9 @@
-from scrapinghub import ScrapinghubClient
+import os
 import re
-import pandas as pd
 from argparse import ArgumentParser
+
+import pandas as pd
+from scrapinghub import ScrapinghubClient
 
 TYPE_OF_ERRORS_PATTERN = re.compile('(?<=\[)(.+)(?=\])', re.DOTALL)
 DESCRIPTION_PATTERN = re.compile('(?<=\])\s(.+?)((?=<)|(?=\(URL)|(?=,))', re.DOTALL)
@@ -15,7 +17,6 @@ def parse_args():
     parent_parser.add_argument(
         '-a',
         '--apikey',
-        required=True,
         help='Scrapinghub API'
     )
     parent_parser.add_argument(
@@ -78,7 +79,7 @@ def parse_warnings(job, urls_for_output=3):
     print("Parsing logs with warnings in progress...")
 
 
-def create_header(df):
+def create_errors_header(df):
     return "\n".join([
         "Errors in the log: {}".format(df.shape[0]),
         "With different scrapy types: {}".format(df.scrapy_type.unique().size),
@@ -95,7 +96,7 @@ def create_header(df):
         ])
 
 
-def create_body(df_grouped, max_urls_for_output):
+def create_errors_body(df_grouped, max_urls_for_output):
     comment_template = '    # {} ({} from {} different {})'
     urls_template = '    "{}",'
     body = ["test_urls = ["]
@@ -140,20 +141,25 @@ def parse_errors(job, max_urls_for_output=3):
         errors.append(error_dict)
 
     df = pd.DataFrame(errors)
-    header = create_header(pd.DataFrame(errors))
+    header = create_errors_header(pd.DataFrame(errors))
     print(header)
 
     df_grouped = df.groupby(['description'], as_index=False)
-    body = create_body(df_grouped, max_urls_for_output)
+    body = create_errors_body(df_grouped, max_urls_for_output)
 
     print(body)
 
 
 def main():
     args = parse_args()
-    client = ScrapinghubClient(args.apikey)
+    apikey = os.environ.get('SH_APIKEY') or args.apikey
+    if not apikey:
+        print('Please set API key')
+        exit(1)
+
+    client = ScrapinghubClient(apikey)
     job = client.get_job(args.job)
-    args.func(job, max_urls_for_output=args.max)
+    args.func(job, max_urls_for_output=(max(args.max, 30)))
 
 
 if __name__ == '__main__':
