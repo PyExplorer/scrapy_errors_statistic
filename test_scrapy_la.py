@@ -86,6 +86,17 @@ class TestScrapyEs(unittest.TestCase):
             ),
             "http://www.sample.com/no7-make-up/no7-mascaras"
         )
+        self.assertEqual(scrapy_la.get_part_of_log_with_re(
+            scrapy_la.URL_PATTERN,
+            """[brandview.middlewares.retry] Splash screenshot error 
+            latency: 28.8296120167)
+                {"url": "http://www.example.com/reeText=stainless+steel&srch=Y", 
+                "reason": "network301", "message": "error rendering splash"}
+            """
+            ),
+            "http://www.example.com/reeText=stainless+steel&srch=Y"
+        )
+
 
     def test_get_response_url(self):
         self.assertEqual(scrapy_la.get_part_of_log_with_re(

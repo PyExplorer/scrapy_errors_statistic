@@ -7,7 +7,7 @@ from scrapinghub import ScrapinghubClient
 
 TYPE_OF_ERRORS_PATTERN = re.compile('(?<=\[)(.+)(?=\])', re.DOTALL)
 DESCRIPTION_PATTERN = re.compile('(?<=\])\s(.+?)((?=<)|(?=\(URL)|(?=,))', re.DOTALL)
-URL_PATTERN = re.compile('((?<=\(URL:)|(?<=for url: \')|(?<=GET)|(?<=POST))(.+?)((?=>)|(?=,)|(?=\'))', re.DOTALL)
+URL_PATTERN = re.compile('((?<=\(URL:)|(?<=for url: \')|(?<=GET)|(?<=POST)|(?<=\"url\": \"))(.+?)((?=>)|(?=,)|(?=\')|(?=\"))', re.DOTALL)
 RESPONSE_URL_PATTERN = re.compile('(?<=response URL:)(.+?)(?=\))', re.DOTALL)
 PYTHON_MESSAGE_OF_ERROR_PATTERN = re.compile('(?<=Traceback \(most recent call last\))(.+)', re.DOTALL)
 
