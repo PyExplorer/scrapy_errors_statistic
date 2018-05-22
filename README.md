@@ -2,8 +2,12 @@ Scrapy log analyzer
 ==
 
 Get logs from job and create some helpful reports. 
+
 So far the script gets all errors from a log for given job and creates
-convenient report to insert into a code for debugging  
+
+convenient report to insert into a code for debugging
+  
+Uses https://github.com/scrapinghub/python-scrapinghub
 
 Example
 --
@@ -66,12 +70,19 @@ Docs
 
 *order is required*
 
-**job**
+**job** - job key string in format project_id/spider_id/job_id, 
 
-**-a (--apikey)** - APIKEY to ScrapinghubClient
+where all the components are integers.
+
+**-a (--apikey)** - APIKEY to ScrapinghubClient 
+
+(Your Scrapinghub API key is available at 
+
+https://app.scrapinghub.com/account/apikey after you sign up with the service.)
 
 APIKEY also can be set with as SH_APIKEY in your environment
-so not necessary to set it with -a 
+
+so not necessary to set it with -a in the future
 
 **errors** - run for errors report 
 
