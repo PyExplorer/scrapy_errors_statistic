@@ -1,7 +1,7 @@
 Scrapy log analyzer
 ==
 
-Get logs from job and create some helpful reports. 
+Get logs from specific job and create some helpful reports. 
 
 So far the script gets all errors from a log for given job and creates
 
