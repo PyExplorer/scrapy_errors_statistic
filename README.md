@@ -15,7 +15,7 @@ Example
 **From command line:**
 
 ```
-$ python3 scrapy_la.py 16014/2/8207 -a i7671323 errors
+$ python3 scrapy_la.py errors 16014/2/8207 -a <APIKEY> 
 
 ```
 
@@ -65,45 +65,38 @@ $ pip3 install -r requirements.txt
 
 Docs
 --
+The script has one command "errors" and 2 required and 1 optional parameters. 
   
 **Required parameters**:
 
-*order is required*
+**job** - job key string in format project_id/spider_id/job_id, where all the components are integers.
 
-**job** - job key string in format project_id/spider_id/job_id, 
+**-a (--apikey)** - APIKEY for ScrapinghubClient (Your Scrapinghub API key is 
 
-where all the components are integers.
+available at https://app.scrapinghub.com/account/apikey after you sign up with the service.)
 
-**-a (--apikey)** - APIKEY to ScrapinghubClient 
-
-(Your Scrapinghub API key is available at 
-
-https://app.scrapinghub.com/account/apikey after you sign up with the service.)
-
-APIKEY also can be set with as SH_APIKEY in your environment
-
-so not necessary to set it with -a in the future
-
-**errors** - run for errors report 
+APIKEY also can be set with as SH_APIKEY in your environment so not necessary to set it with -a in the future
 
 ```
-$ python3 scrapy-la.py 10/10/10 - a fhkdjsafhsd errors'
+$ python3 scrapy-la.py errors 10/10/10 -a <APIKEY>'
 ```
 
-**Optional parameters**
+**Optional parameters for errors**
 
 **-m (--max)** - Set max urls to output for each type of log (errors)
   
 *default:* 3
 
 ```
-$ python3 scrapy-la.py 10/10/10 -m 5 errors 
+$ python3 scrapy-la.py errors 10/10/10 -a <APIKEY> -m 5
 ```
 
 Contributing
 --
 
-To contribute, pick an issue to work on and leave a comment saying that you've taken the issue. Don't forget to mention when you want to submit the pull request.
+To contribute, pick an issue to work on and leave a comment saying that you've taken the issue. 
+
+Don't forget to mention when you want to submit the pull request.
 
 
 Launch tests
@@ -114,12 +107,11 @@ Launch tests
 Next features:
 --
  
-
 - get statistic for all errors from a project (not only one job) - types, counts, etc;
 
 - find specific error's message (or scrapy/python types) in all spiders for project
 
-- add the same for warnings
+- add command 'warnings' for warning's analyze
 
 - and more
 

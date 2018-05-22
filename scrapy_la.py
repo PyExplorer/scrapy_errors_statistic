@@ -13,19 +13,8 @@ PYTHON_MESSAGE_OF_ERROR_PATTERN = re.compile('(?<=Traceback \(most recent call l
 
 
 def parse_args():
-    parent_parser = ArgumentParser(add_help=False)
-    parent_parser.add_argument(
-        '-a',
-        '--apikey',
-        help='Scrapinghub API'
-    )
-    parent_parser.add_argument(
-        'job',
-        help='Job key in format project_id/spider_id/job_id'
-    )
     parser = ArgumentParser(
         description='Get statistic for scrapy log',
-        parents=[parent_parser]
     )
     subparsers = parser.add_subparsers(help='sub-command help', dest="command")
     parser_errors = subparsers.add_parser(
@@ -39,6 +28,16 @@ def parse_args():
         help='Set max urls to output for each error',
         default=3,
     )
+    parser_errors.add_argument(
+        '-a',
+        '--apikey',
+        help='Scrapinghub API'
+    )
+    parser_errors.add_argument(
+        'job',
+        help='Job key in format project_id/spider_id/job_id'
+    )
+
     parser_errors.set_defaults(func=parse_errors)
 
     parser_warnings = subparsers.add_parser(
