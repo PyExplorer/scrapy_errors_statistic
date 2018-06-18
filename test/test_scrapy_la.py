@@ -1,6 +1,6 @@
 import unittest
 
-import scrapy_la
+from scrapy_la import scrapy_la
 
 
 class TestScrapyEs(unittest.TestCase):

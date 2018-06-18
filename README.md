@@ -102,7 +102,7 @@ Don't forget to mention when you want to submit the pull request.
 Launch tests
 --
 
-*$ python3 -m unittest*
+*$ python3 -m unittest discover*
 
 Next features:
 --
